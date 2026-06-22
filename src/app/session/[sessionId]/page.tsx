@@ -92,7 +92,7 @@ export default function GamePage() {
         <EmptyState
           title="Không tìm thấy phiên chơi"
           description="Phiên chơi này không tồn tại hoặc đã bị xoá."
-          action={<Button onClick={() => router.push("/")}>Quay lại</Button>}
+          action={<Button onClick={() => router.push("/sessions")}>Quay lại</Button>}
         />
       </div>
     );
@@ -104,7 +104,7 @@ export default function GamePage() {
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-4 sm:py-8">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => router.push("/")}>
+          <Button variant="ghost" size="sm" onClick={() => router.push("/sessions")}>
             ←
           </Button>
           <h1 className="text-xl font-bold text-[#0a0a0a]">{session.name}</h1>
