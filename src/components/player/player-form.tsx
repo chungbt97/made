@@ -5,29 +5,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const CARD_COLORS = [
-  "#ff4d8b",
-  "#1a3a3a",
-  "#b8a4ed",
-  "#ffb084",
-  "#e8b94a",
-  "#f5f0e0",
+  "#E68457",
+  "#FFE8B4",
+  "#293681",
+  "#4274D9",
+  "#95CCDD",
+  "#FFF78D",
+  "#467235",
+  "#D6FB61",
+  "#F6850C",
+  "#DE3E3E",
 ];
+
+function pickColor(existing: string[]): string {
+  const available = CARD_COLORS.filter((c) => !existing.includes(c));
+  if (available.length > 0) {
+    return available[Math.floor(Math.random() * available.length)];
+  }
+  return CARD_COLORS[Math.floor(Math.random() * CARD_COLORS.length)];
+}
 
 interface PlayerFormProps {
   onSubmit: (name: string, color: string) => void;
   onCancel: () => void;
+  existingColors?: string[];
 }
 
-export function PlayerForm({ onSubmit, onCancel }: PlayerFormProps) {
+export function PlayerForm({
+  onSubmit,
+  onCancel,
+  existingColors = [],
+}: PlayerFormProps) {
   const [name, setName] = useState("");
-  const [color, setColor] = useState(CARD_COLORS[0]);
+  const [color, setColor] = useState(() => pickColor(existingColors));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
     onSubmit(name.trim(), color);
-    setName("");
-    setColor(CARD_COLORS[0]);
   };
 
   return (

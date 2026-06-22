@@ -140,6 +140,7 @@ export default function GamePage() {
         <PlayerForm
           onSubmit={handleAddPlayer}
           onCancel={() => setShowAddPlayer(false)}
+          existingColors={session.players.map((p) => p.color)}
         />
       </Modal>
     </div>
