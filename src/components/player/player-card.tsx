@@ -4,14 +4,14 @@ import { useState, useRef } from "react";
 import type { Player } from "@/types";
 import { formatScore } from "@/lib/utils/format-score";
 
-const CLAY_BRAND_COLORS: Record<string, { bg: string; text: string; button: string }> = {
-  "#ff4d8b": { bg: "#ff4d8b", text: "#ffffff", button: "#ffffff33" },
-  "#1a3a3a": { bg: "#1a3a3a", text: "#ffffff", button: "#ffffff33" },
-  "#b8a4ed": { bg: "#b8a4ed", text: "#0a0a0a", button: "#00000015" },
-  "#ffb084": { bg: "#ffb084", text: "#0a0a0a", button: "#00000015" },
-  "#e8b94a": { bg: "#e8b94a", text: "#0a0a0a", button: "#00000015" },
-  "#f5f0e0": { bg: "#f5f0e0", text: "#0a0a0a", button: "#00000015" },
-};
+function getContrastText(bg: string): string {
+  const hex = bg.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.6 ? "#0a0a0a" : "#ffffff";
+}
 
 interface PlayerCardProps {
   player: Player;
@@ -34,12 +34,6 @@ export function PlayerCard({
 
   const numValue = value === "" ? 0 : parseFloat(value);
   const isValid = value !== "" && !isNaN(numValue) && numValue > 0;
-
-  const theme = CLAY_BRAND_COLORS[player.color] || {
-    bg: "#f5f0e0",
-    text: "#0a0a0a",
-    button: "#00000015",
-  };
 
   const handlePlus = () => {
     if (!isValid) return;
@@ -65,30 +59,28 @@ export function PlayerCard({
     }
   };
 
+  const avatarTextColor = getContrastText(player.color);
+
   return (
     <div
-      className="flex flex-col rounded-2xl p-5 transition-all"
-      style={{ backgroundColor: theme.bg }}
+      className="flex flex-col rounded-2xl border-2 p-5 transition-all"
+      style={{ borderColor: player.color, backgroundColor: "#faf5e8" }}
     >
       <div className="mb-3 flex items-center gap-3">
         <div
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-bold"
-          style={{ backgroundColor: theme.button, color: theme.text }}
+          style={{ backgroundColor: player.color, color: avatarTextColor }}
         >
           {player.avatar || player.name.charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
-          <h3
-            className="truncate text-sm font-semibold"
-            style={{ color: theme.text }}
-          >
+          <h3 className="truncate text-sm font-semibold text-[#0a0a0a]">
             {player.name}
           </h3>
           <div
             className={`text-2xl font-bold tabular-nums leading-none ${
-              isPositive ? "text-[#22c55e]" : isNegative ? "text-[#ef4444]" : ""
+              isPositive ? "text-[#22c55e]" : isNegative ? "text-[#ef4444]" : "text-[#0a0a0a]"
             }`}
-            style={{ color: !isPositive && !isNegative ? theme.text : undefined }}
           >
             {formatScore(player.score)}
           </div>
@@ -121,8 +113,7 @@ export function PlayerCard({
             <button
               onClick={() => onUndo(player.id)}
               disabled={!canUndo}
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold transition-opacity disabled:opacity-30"
-              style={{ backgroundColor: theme.button, color: theme.text }}
+              className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e5e5e5] text-sm font-bold text-[#0a0a0a] transition-opacity disabled:opacity-30"
               title="Hoàn tác"
             >
               ↶

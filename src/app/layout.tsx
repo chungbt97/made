@@ -36,7 +36,8 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`${inter.variable} h-full antialiased`}>
       <head>
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon_app.png" />
+        <link rel="icon" type="image/x-icon" href="/icon_app.ico" />
       </head>
       <body className="flex min-h-full flex-col font-sans">
         <CSR_Root>{children}</CSR_Root>

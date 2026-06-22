@@ -48,7 +48,7 @@ export function SessionList({ onOpenSession }: SessionListProps) {
     };
     await saveSession(newSession);
     setShowCreate(false);
-    loadSessions();
+    onOpenSession(newSession.id);
   };
 
   const handleRenameSubmit = async (name: string) => {

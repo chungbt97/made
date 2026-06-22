@@ -22,6 +22,7 @@ export function ScoreBoard({ players }: ScoreBoardProps) {
   const data = players.map((p) => ({
     name: p.name,
     score: Math.round(p.score * 100) / 100,
+    color: p.color,
   }));
 
   const leader = [...players].sort((a, b) => b.score - a.score)[0];
@@ -85,7 +86,7 @@ export function ScoreBoard({ players }: ScoreBoardProps) {
               {data.map((entry) => (
                 <Cell
                   key={entry.name}
-                  fill={entry.score >= 0 ? "#22c55e" : "#ef4444"}
+                  fill={entry.color}
                   fillOpacity={0.85}
                 />
               ))}
