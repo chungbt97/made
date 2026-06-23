@@ -11,6 +11,7 @@ interface PlayerListProps {
   onUndo: (playerId: string) => void;
   undoHistory: Record<string, boolean>;
   onAddPlayer: () => void;
+  isAdmin: boolean;
 }
 
 export function PlayerList({
@@ -19,13 +20,14 @@ export function PlayerList({
   onUndo,
   undoHistory,
   onAddPlayer,
+  isAdmin,
 }: PlayerListProps) {
   if (players.length === 0) {
     return (
       <EmptyState
         title="Chưa có người chơi"
         description="Thêm người chơi để bắt đầu theo dõi điểm số."
-        action={<Button onClick={onAddPlayer}>Thêm người chơi</Button>}
+        action={isAdmin ? <Button onClick={onAddPlayer}>Thêm người chơi</Button> : undefined}
       />
     );
   }
@@ -39,8 +41,17 @@ export function PlayerList({
           onApplyScore={onApplyScore}
           onUndo={onUndo}
           canUndo={!!undoHistory[player.id]}
+          isAdmin={isAdmin}
         />
       ))}
+      {isAdmin && players.length > 0 && (
+        <button
+          onClick={onAddPlayer}
+          className="flex min-h-[140px] items-center justify-center rounded-2xl border-2 border-dashed border-[#e5e5e5] bg-[#faf5e8] text-sm font-medium text-[#6a6a6a] transition-colors hover:border-[#0a0a0a] hover:text-[#0a0a0a]"
+        >
+          + Thêm người chơi
+        </button>
+      )}
     </div>
   );
 }

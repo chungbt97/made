@@ -33,9 +33,21 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# database files
+/data/
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+AGENTS.md
+CLAUDE.md
+COLOR.md
+DB.md
+DESIGN.md
+IMPLEMENTATION_PLAN.md
+TWO_LAYER_AUTHEN.md
+REQUIREMENT.md

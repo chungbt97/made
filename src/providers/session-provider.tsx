@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { Session, Player } from "@/types";
 import { distributeScore } from "@/lib/scoring/zero-sum";
-import { saveSession, getSession } from "@/lib/db/session-repository";
+import { saveSession } from "@/lib/db/session-repository";
 
 interface SessionContextValue {
   session: Session | null;

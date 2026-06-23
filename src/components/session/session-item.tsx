@@ -9,6 +9,7 @@ interface SessionItemProps {
   onOpen: (id: string) => void;
   onRename: (session: Session) => void;
   onDelete: (id: string) => void;
+  isAdmin: boolean;
 }
 
 export function SessionItem({
@@ -16,6 +17,7 @@ export function SessionItem({
   onOpen,
   onRename,
   onDelete,
+  isAdmin,
 }: SessionItemProps) {
   return (
     <div className="flex items-center justify-between rounded-xl border border-[#e5e5e5] bg-[#f5f0e0] p-4 transition-colors hover:bg-[#ebe6d6]">
@@ -32,20 +34,24 @@ export function SessionItem({
         <Button size="sm" onClick={() => onOpen(session.id)}>
           Mở
         </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => onRename(session)}
-        >
-          Sửa
-        </Button>
-        <Button
-          size="sm"
-          variant="danger"
-          onClick={() => onDelete(session.id)}
-        >
-          Xoá
-        </Button>
+        {isAdmin && (
+          <>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => onRename(session)}
+            >
+              Sửa
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => onDelete(session.id)}
+            >
+              Xoá
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

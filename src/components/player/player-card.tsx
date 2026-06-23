@@ -18,6 +18,7 @@ interface PlayerCardProps {
   onApplyScore: (playerId: string, delta: number) => void;
   onUndo: (playerId: string) => void;
   canUndo: boolean;
+  isAdmin: boolean;
 }
 
 export function PlayerCard({
@@ -25,6 +26,7 @@ export function PlayerCard({
   onApplyScore,
   onUndo,
   canUndo,
+  isAdmin,
 }: PlayerCardProps) {
   const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -87,57 +89,59 @@ export function PlayerCard({
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <input
-            ref={inputRef}
-            type="number"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="0"
-            className="h-full w-full resize-none rounded-xl border border-[#e5e5e5] bg-white/70 px-4 text-lg font-semibold text-[#0a0a0a] placeholder-[#9a9a9a] outline-none [appearance:textfield] focus:border-[#0a0a0a] focus:ring-2 focus:ring-[#0a0a0a] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            style={{ minHeight: "5rem" }}
-          />
-        </div>
+      {isAdmin && (
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <input
+              ref={inputRef}
+              type="number"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="0"
+              className="h-full w-full resize-none rounded-xl border border-[#e5e5e5] bg-white/70 px-4 text-lg font-semibold text-[#0a0a0a] placeholder-[#9a9a9a] outline-none [appearance:textfield] focus:border-[#0a0a0a] focus:ring-2 focus:ring-[#0a0a0a] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              style={{ minHeight: "5rem" }}
+            />
+          </div>
 
-        <div className="flex shrink-0 flex-col gap-1.5">
-          <div className="flex gap-1.5">
-            <button
-              onClick={handleMinus}
-              disabled={!isValid}
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#ef4444] text-sm font-bold text-white transition-opacity disabled:opacity-30"
-            >
-              −
-            </button>
-            <button
-              onClick={() => onUndo(player.id)}
-              disabled={!canUndo}
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e5e5e5] text-sm font-bold text-[#0a0a0a] transition-opacity disabled:opacity-30"
-              title="Hoàn tác"
-            >
-              ↶
-            </button>
-          </div>
-          <div className="flex gap-1.5">
-            <button
-              onClick={handlePlus}
-              disabled={!isValid}
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#22c55e] text-sm font-bold text-white transition-opacity disabled:opacity-30"
-            >
-              +
-            </button>
-            <button
-              onClick={handleTick}
-              disabled={!isValid}
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0a0a0a] text-sm font-bold text-white transition-opacity disabled:opacity-30"
-              title="Xác nhận"
-            >
-              ✓
-            </button>
+          <div className="flex shrink-0 flex-col gap-1.5">
+            <div className="flex gap-1.5">
+              <button
+                onClick={handleMinus}
+                disabled={!isValid}
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#ef4444] text-sm font-bold text-white transition-opacity disabled:opacity-30"
+              >
+                −
+              </button>
+              <button
+                onClick={() => onUndo(player.id)}
+                disabled={!canUndo}
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e5e5e5] text-sm font-bold text-[#0a0a0a] transition-opacity disabled:opacity-30"
+                title="Hoàn tác"
+              >
+                ↶
+              </button>
+            </div>
+            <div className="flex gap-1.5">
+              <button
+                onClick={handlePlus}
+                disabled={!isValid}
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#22c55e] text-sm font-bold text-white transition-opacity disabled:opacity-30"
+              >
+                +
+              </button>
+              <button
+                onClick={handleTick}
+                disabled={!isValid}
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0a0a0a] text-sm font-bold text-white transition-opacity disabled:opacity-30"
+                title="Xác nhận"
+              >
+                ✓
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

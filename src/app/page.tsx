@@ -1,28 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function HomePage() {
+  const router = useRouter();
   const [checking, setChecking] = useState(true);
   const [input, setInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem("unlocked") === "true") {
-      window.location.replace("/sessions");
+      const target = sessionStorage.getItem("redirectTarget") || "/sessions";
+      sessionStorage.removeItem("redirectTarget");
+      router.replace(target);
     } else {
       setChecking(false);
     }
-  }, []);
+  }, [router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (input.trim() === "25251325") {
-      sessionStorage.setItem("unlocked", "true");
-      window.location.replace("/sessions");
-    } else {
+    try {
+      const res = await fetch("/api/auth/unlock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: input.trim() }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        sessionStorage.setItem("unlocked", "true");
+        sessionStorage.setItem("role", data.role || "viewer");
+        const target = sessionStorage.getItem("redirectTarget") || "/sessions";
+        sessionStorage.removeItem("redirectTarget");
+        router.replace(target);
+      } else {
+        setSubmitted(true);
+      }
+    } catch {
       setSubmitted(true);
     }
   };

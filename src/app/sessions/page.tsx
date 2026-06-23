@@ -10,11 +10,12 @@ export default function SessionsPage() {
 
   useEffect(() => {
     if (sessionStorage.getItem("unlocked") !== "true") {
-      window.location.replace("/");
+      sessionStorage.setItem("redirectTarget", "/sessions");
+      router.replace("/");
     } else {
       setReady(true);
     }
-  }, []);
+  }, [router]);
 
   if (!ready) return null;
 

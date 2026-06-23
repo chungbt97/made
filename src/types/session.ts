@@ -7,4 +7,7 @@ export interface Session {
   updatedAt: number;
   scoreStep: number;
   players: Player[];
+  deletedAt?: number | null;
+  syncStatus?: "synced" | "pending_upsert" | "pending_delete";
+  lastSyncedAt?: number | null;
 }
