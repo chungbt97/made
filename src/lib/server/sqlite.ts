@@ -2,20 +2,32 @@ import Database from "better-sqlite3";
 import path from "node:path";
 import fs from "node:fs";
 
-const DB_PATH = path.join(process.cwd(), "data", "nine-balls.db");
+function getDbPath(): string {
+  if (process.env.VERCEL === "1") {
+    return path.join("/tmp", "nine-balls.db");
+  }
+  return path.join(process.cwd(), "data", "nine-balls.db");
+}
+
+const DB_PATH = getDbPath();
 
 let db: Database.Database | null = null;
 
 export function getDb(): Database.Database {
   if (!db) {
-    const dir = path.dirname(DB_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    try {
+      const dir = path.dirname(DB_PATH);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      db = new Database(DB_PATH);
+      db.pragma("journal_mode = WAL");
+      db.pragma("foreign_keys = ON");
+      initSchema(db);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      throw new Error("SQLite init failed: " + msg + " (path=" + DB_PATH + ")");
     }
-    db = new Database(DB_PATH);
-    db.pragma("journal_mode = WAL");
-    db.pragma("foreign_keys = ON");
-    initSchema(db);
   }
   return db;
 }

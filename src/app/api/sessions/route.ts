@@ -7,8 +7,9 @@ export async function GET() {
   try {
     const sessions = getAllSessions();
     return NextResponse.json({ sessions });
-    } catch {
-    return NextResponse.json({ error: "Failed to fetch sessions" }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to fetch sessions", detail: msg }, { status: 500 });
   }
 }
 
@@ -31,7 +32,8 @@ export async function POST(request: Request) {
       { session: { id, name } },
       { status: isNew ? 201 : 200 }
     );
-  } catch {
-    return NextResponse.json({ error: "Failed to create session" }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to create session", detail: msg }, { status: 500 });
   }
 }

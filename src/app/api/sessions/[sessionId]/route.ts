@@ -18,8 +18,9 @@ export async function GET(
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
     return NextResponse.json({ session });
-    } catch {
-    return NextResponse.json({ error: "Failed to fetch session" }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to fetch session", detail: msg }, { status: 500 });
   }
 }
 
@@ -44,8 +45,9 @@ export async function PUT(
       deletedAt: body.deletedAt ?? existing.deletedAt,
     });
     return NextResponse.json({ session: { id: sessionId } });
-  } catch {
-    return NextResponse.json({ error: "Failed to update session" }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to update session", detail: msg }, { status: 500 });
   }
 }
 
@@ -60,7 +62,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Failed to delete session" }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to delete session", detail: msg }, { status: 500 });
   }
 }

@@ -21,7 +21,8 @@ export async function POST(request: Request) {
       records: serverSessions,
       serverTimestamp: Date.now(),
     });
-  } catch {
-    return NextResponse.json({ error: "Sync failed" }, { status: 500 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return NextResponse.json({ error: "Sync failed", detail: msg }, { status: 500 });
   }
 }
